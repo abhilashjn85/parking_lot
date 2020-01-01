@@ -8,7 +8,7 @@ public class ErrorCodes {
     public static final String INVALID_FILE = "400.101";
 
     public static final String CONSTRAINTS_VIOLATION = "400.105";
-    public static final String INVALID_USER = "400.110";
+    public static final String DUPLICATE_SLOT_FOUND = "400.110";
     // 401 & 403 Related Error Codes go here
     public static final String INACTIVE_USER = "403.201";
     public static final String NOT_AUTHORIZED = "403.202";
