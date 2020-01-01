@@ -3,15 +3,27 @@ package com.gojek.parking;
 import com.gojek.parking.constant.Constant;
 import com.gojek.parking.exception.ParkingLotException;
 import com.gojek.parking.printer.ParkingPrinter;
+import com.gojek.parking.processor.BaseProcessor;
+import com.gojek.parking.processor.ParkingLotProcessor;
+import com.gojek.parking.service.impl.IssueSlotServiceImpl;
+import com.gojek.parking.service.impl.ParkingLotServiceImpl;
 import com.gojek.parking.util.ErrorCodes;
 
 import java.io.*;
 
 public class Main {
 
+    private static BaseProcessor init() {
+        BaseProcessor processor = new ParkingLotProcessor();
+        processor.setParkingLotService(new ParkingLotServiceImpl());
+        processor.setIssueSlotService(new IssueSlotServiceImpl());
+
+        return processor;
+    }
+
     public static void main(String[] args) {
 
-        System.out.println(Constant.PARKING_LOT_MESSAGE);
+        BaseProcessor processor = init();
         System.out.println(ParkingPrinter.stringifyParkingInstruction());
 
         BufferedReader reader = null;
@@ -29,6 +41,12 @@ public class Main {
                         /**
                          * //TODO: code logic
                          */
+
+                        formParkingLot(input);
+                        formParkingIntent(input);
+
+                        processor.process(null, null);
+
                     } catch (IOException e) {
                         throw new ParkingLotException(ErrorCodes.INVALID_INPUT, "Invalid Input data, Read Input Instruction Again.");
                     }
@@ -57,5 +75,11 @@ public class Main {
             default:
                 System.out.println("Invalid input. Please read instruction. ErrorCode: ");
         }
+    }
+
+    private static void formParkingIntent(String input) {
+    }
+
+    private static void formParkingLot(String input) {
     }
 }
