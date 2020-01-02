@@ -1,10 +1,12 @@
 package com.gojek.parking;
 
+import com.gojek.parking.api.ParkingLotWrapper;
 import com.gojek.parking.constant.Constant;
 import com.gojek.parking.exception.ParkingLotException;
 import com.gojek.parking.printer.ParkingPrinter;
 import com.gojek.parking.processor.BaseProcessor;
 import com.gojek.parking.processor.ParkingLotProcessor;
+import com.gojek.parking.resolver.InputResolver;
 import com.gojek.parking.service.impl.IssueSlotServiceImpl;
 import com.gojek.parking.service.impl.ParkingLotServiceImpl;
 import com.gojek.parking.util.ErrorCodes;
@@ -38,14 +40,9 @@ public class Main {
                         if (Constant.EXIT.equalsIgnoreCase(input)) {
                             break;
                         }
-                        /**
-                         * //TODO: code logic
-                         */
 
-                        formParkingLot(input);
-                        formParkingIntent(input);
-
-                        processor.process(null, null);
+                        ParkingLotWrapper wrapper = InputResolver.resolveAndValidate(input);
+                        processor.process(wrapper.getParkingLot(), wrapper.getParkingLotIntent());
 
                     } catch (IOException e) {
                         throw new ParkingLotException(ErrorCodes.INVALID_INPUT, "Invalid Input data, Read Input Instruction Again.");
@@ -58,9 +55,9 @@ public class Main {
                     reader = new BufferedReader(new FileReader(inputFile));
                     while ((input = reader.readLine()) != null) {
                         input = input.trim();
-                        /**
-                         * //TODO: code logic
-                         */
+
+                        ParkingLotWrapper wrapper = InputResolver.resolveAndValidate(input);
+                        processor.process(wrapper.getParkingLot(), wrapper.getParkingLotIntent());
                     }
                 } catch (IOException e) {
                     throw new ParkingLotException(ErrorCodes.INVALID_FILE, "Invalid File.");
