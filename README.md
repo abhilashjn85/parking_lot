@@ -2,7 +2,8 @@
 
 This is a Java8 Spring Boot project. Get familiar with it and import it into your IDE.
 
-#Instruction to follow:
+# Instructions to follow.
+
 1. Checkout the code.
 2. run command at project directory /parking_lot
       command: mvn clean install
