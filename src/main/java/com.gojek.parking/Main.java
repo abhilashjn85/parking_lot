@@ -2,6 +2,7 @@ package com.gojek.parking;
 
 import com.gojek.parking.api.ParkingLotWrapper;
 import com.gojek.parking.constant.Constant;
+import com.gojek.parking.exception.NoParkingLotException;
 import com.gojek.parking.exception.ParkingLotException;
 import com.gojek.parking.printer.ParkingPrinter;
 import com.gojek.parking.processor.BaseProcessor;
@@ -47,6 +48,8 @@ public class Main {
                             processor.process(wrapper.getParkingLot(), wrapper.getParkingLotIntent());
                         } catch(ParkingLotException e) {
                             System.out.println(e.getMessage() + ", ErrorCode: " +e.getErrorCode());
+                        } catch (NoParkingLotException e) {
+                            System.out.println(e.getMessage() + ", ErrorCode: " +e.getErrorCode());
                         }
 
                     } catch (IOException e) {
@@ -65,6 +68,8 @@ public class Main {
                             ParkingLotWrapper wrapper = InputResolver.resolveAndValidate(input);
                             processor.process(wrapper.getParkingLot(), wrapper.getParkingLotIntent());
                         } catch(ParkingLotException e) {
+                            System.out.println(e.getMessage() + ", ErrorCode: " +e.getErrorCode());
+                        } catch (NoParkingLotException e) {
                             System.out.println(e.getMessage() + ", ErrorCode: " +e.getErrorCode());
                         }
                     }
