@@ -6,5 +6,8 @@ public class Constant {
     public static String EXIT = "exit";
     public static String DASH_SEPARATOR = " - ";
     public static String ENTER = "Enter: ";
+    public static String CREATE_PARKING_LOT = "create_parking_lot";
 
+    public static Integer ALREADY_PARKED_CODE = -2;
+    public static Integer NOT_ENOUGH_SPACE_CODE = -1;
 }

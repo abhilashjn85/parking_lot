@@ -30,6 +30,7 @@ public class Main {
 
         BufferedReader reader = null;
         String input;
+
         switch (args.length) {
             case 0:
                 System.out.println(Constant.EXIT_MESSAGE);
@@ -41,8 +42,12 @@ public class Main {
                             break;
                         }
 
-                        ParkingLotWrapper wrapper = InputResolver.resolveAndValidate(input);
-                        processor.process(wrapper.getParkingLot(), wrapper.getParkingLotIntent());
+                        try {
+                            ParkingLotWrapper wrapper = InputResolver.resolveAndValidate(input);
+                            processor.process(wrapper.getParkingLot(), wrapper.getParkingLotIntent());
+                        } catch(ParkingLotException e) {
+                            System.out.println(e.getMessage() + ", ErrorCode: " +e.getErrorCode());
+                        }
 
                     } catch (IOException e) {
                         throw new ParkingLotException(ErrorCodes.INVALID_INPUT, "Invalid Input data, Read Input Instruction Again.");
@@ -56,8 +61,12 @@ public class Main {
                     while ((input = reader.readLine()) != null) {
                         input = input.trim();
 
-                        ParkingLotWrapper wrapper = InputResolver.resolveAndValidate(input);
-                        processor.process(wrapper.getParkingLot(), wrapper.getParkingLotIntent());
+                        try {
+                            ParkingLotWrapper wrapper = InputResolver.resolveAndValidate(input);
+                            processor.process(wrapper.getParkingLot(), wrapper.getParkingLotIntent());
+                        } catch(ParkingLotException e) {
+                            System.out.println(e.getMessage() + ", ErrorCode: " +e.getErrorCode());
+                        }
                     }
                 } catch (IOException e) {
                     throw new ParkingLotException(ErrorCodes.INVALID_FILE, "Invalid File.");
@@ -70,13 +79,7 @@ public class Main {
                     }
                 }
             default:
-                System.out.println("Invalid input. Please read instruction. ErrorCode: ");
+                System.out.println("Invalid Input. Please read the instruction carefully, ErrorCode: " + ErrorCodes.INVALID_INPUT);
         }
-    }
-
-    private static void formParkingIntent(String input) {
-    }
-
-    private static void formParkingLot(String input) {
     }
 }

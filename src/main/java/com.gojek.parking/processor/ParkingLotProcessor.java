@@ -5,6 +5,7 @@ import com.gojek.parking.enums.ParkingLotIntent;
 import com.gojek.parking.exception.ParkingLotException;
 import com.gojek.parking.service.IssueSlotService;
 import com.gojek.parking.service.ParkingLotService;
+import com.gojek.parking.service.impl.IssueSlotServiceImpl;
 import com.gojek.parking.util.ErrorCodes;
 
 public class ParkingLotProcessor implements BaseProcessor {
@@ -29,22 +30,23 @@ public class ParkingLotProcessor implements BaseProcessor {
         switch (intent) {
 
             case CREATE :
+                IssueSlotServiceImpl.getInstance(parkingLot.getCapacity());
                 parkingLotService.createParkingLot(parkingLot);
                 break;
 
             case PARK:
-                parkingLotService.park(issueSlotService, parkingLot.getVehicle());
+                parkingLotService.park(parkingLot.getVehicle());
                 break;
 
             case STATUS:
                 parkingLotService.fetchStatus();
                 break;
 
-            case REGISTRATION_NUMBERS_BY_COLOR:
+            case REGISTRATION_NUMBERS_FOR_CARS_WITH_COLOUR:
                 parkingLotService.fetchRegistrationNumbersByColor(parkingLot.getVehicle().getColor());
                 break;
 
-            case SLOT_NUMBERS_BY_COLOR:
+            case SLOT_NUMBERS_FOR_CARS_WITH_COLOUR:
                 parkingLotService.fetchSlotNumbersByColor(parkingLot.getVehicle().getColor());
                 break;
 
@@ -52,7 +54,7 @@ public class ParkingLotProcessor implements BaseProcessor {
                 parkingLotService.unPark(parkingLot);
                 break;
 
-            case SLOT_NUMBER_BY_REGISTRATION_NUMBER:
+            case SLOT_NUMBER_FOR_REGISTRATION_NUMBER:
                 parkingLotService.fetchSlotNumberByRegistrationNumber(parkingLot.getVehicle().getRegistrationNumber());
                 break;
 

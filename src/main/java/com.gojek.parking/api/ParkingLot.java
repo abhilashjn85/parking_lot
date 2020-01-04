@@ -5,9 +5,9 @@ import com.gojek.parking.util.ErrorCodes;
 
 public class ParkingLot extends Base {
 
-    private Integer capacity = Integer.MAX_VALUE;
+    private Integer capacity;
     private Vehicle vehicle;
-    private int slotNumber;
+    private Integer slotNumber;
 
     ParkingLot(ParkingLot.Builder builder) {
         this.capacity = builder.capacity;
@@ -42,7 +42,7 @@ public class ParkingLot extends Base {
             return this;
         }
 
-        public ParkingLot.Builder setSlotNumber(int slotNumber) {
+        public ParkingLot.Builder setSlotNumber(Integer slotNumber) {
             this.slotNumber = slotNumber;
             return this;
         }

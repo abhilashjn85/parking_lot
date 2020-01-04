@@ -1,7 +1,10 @@
 package com.gojek.parking.service.impl;
 
 import com.gojek.parking.api.Vehicle;
+import com.gojek.parking.exception.ParkingLotException;
 import com.gojek.parking.service.IssueSlotService;
+import com.gojek.parking.util.ErrorCodes;
+
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -34,18 +37,17 @@ public class IssueSlotServiceImpl implements IssueSlotService {
         this.capacity.set(capacity);
         slotVehicleRegistrationMap = new ConcurrentHashMap<>();
         for (int i = 1; i <= capacity; i++) {
-            slotVehicleRegistrationMap.put(i, null);
             availableSlotsMap.put(i, Boolean.TRUE);
         }
     }
 
     @Override
-    public int parkCar(Vehicle vehicle)
-    {
+    public int parkCar(Vehicle vehicle) {
+
         if (availableSlotsMap.size() == 0) {
             return -1;
-        } else if (slotVehicleRegistrationMap.containsValue(vehicle.getRegistrationNumber())) {
-            return -1;
+        } else if(null != vehicleRegistrationMap.get(vehicle.getRegistrationNumber())) {
+            return -2;
         }
 
         int availableSlotFirstKey = availableSlotsMap.firstKey().intValue();
@@ -57,14 +59,16 @@ public class IssueSlotServiceImpl implements IssueSlotService {
     }
 
     @Override
-    public Boolean leaveCar(int slotNumber)
-    {
+    public Boolean leaveCar(int slotNumber) {
+
         if (null == slotVehicleRegistrationMap.get(slotNumber)) {
+            System.out.println("No vehicle is parked with this slot.");
             return false;
         }
 
-        availableSlotsMap.remove(slotNumber);
-        slotVehicleRegistrationMap.put(slotNumber, null);
+        availableSlotsMap.put(slotNumber, Boolean.TRUE);
+        vehicleRegistrationMap.remove(slotVehicleRegistrationMap.get(slotNumber));
+        slotVehicleRegistrationMap.remove(slotNumber);
         return true;
     }
 
@@ -75,7 +79,7 @@ public class IssueSlotServiceImpl implements IssueSlotService {
             String registrationKey = slotVehicleRegistrationMap.get(i);
             Vehicle vehicle = vehicleRegistrationMap.get(registrationKey);
             if (null != vehicle) {
-                results.add(i + "\t\t" + registrationKey + "\t\t" + vehicle.getColor());
+                results.add(i + " " + registrationKey + " " + vehicle.getColor());
             }
         }
         return results;
@@ -119,16 +123,16 @@ public class IssueSlotServiceImpl implements IssueSlotService {
                 result = i;
             }
         }
+
+        if(result == -1) {
+            throw new ParkingLotException(ErrorCodes.OBJ_NOT_FOUND, "Not found");
+        }
         return result;
     }
 
     @Override
     public int fetchAvailableSlot() {
         return availableSlotsMap.firstKey();
-    }
-
-    public Object clone() throws CloneNotSupportedException {
-        throw new CloneNotSupportedException();
     }
 
     @Override

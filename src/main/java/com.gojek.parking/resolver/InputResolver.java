@@ -3,6 +3,7 @@ package com.gojek.parking.resolver;
 import com.gojek.parking.api.ParkingLot;
 import com.gojek.parking.api.ParkingLotWrapper;
 import com.gojek.parking.api.Vehicle;
+import com.gojek.parking.constant.Constant;
 import com.gojek.parking.enums.ParkingLotIntent;
 import com.gojek.parking.exception.ParkingLotException;
 import com.gojek.parking.util.ErrorCodes;
@@ -16,7 +17,7 @@ public class InputResolver {
         ParkingLotWrapper parkingLotWrapper;
 
         String text[] = input.split(" ");
-        if(text.length == 2 && ParkingLotIntent.CREATE.toString().equalsIgnoreCase(text[0])) {
+        if(text.length == 2 && Constant.CREATE_PARKING_LOT.equalsIgnoreCase(text[0])) {
             int capacity;
             try {
                 capacity = Integer.parseInt(text[1]);
@@ -36,6 +37,7 @@ public class InputResolver {
                         .newInstance()
                         .setVehicle(Vehicle.Builder
                                 .newInstance()
+                                .setRegistrationNumber(text[1])
                                 .setColor(text[2])
                                 .build())
                         .build(),
@@ -55,14 +57,15 @@ public class InputResolver {
                     .newInstance()
                     .setSlotNumber(slotNumber)
                     .build(),
-                    ParkingLotIntent.LEAVE);
+                    ParkingLotIntent.UNPARK);
 
         } else if(text.length == 1 && ParkingLotIntent.STATUS.toString().equalsIgnoreCase(text[0])) {
 
             return new ParkingLotWrapper(null,
                     ParkingLotIntent.STATUS);
 
-        } else if (text.length == 2 && ParkingLotIntent.REGISTRATION_NUMBERS_BY_COLOR.toString().equalsIgnoreCase(text[0])) {
+        } else if (text.length == 2 && ParkingLotIntent.REGISTRATION_NUMBERS_FOR_CARS_WITH_COLOUR.toString().equalsIgnoreCase(text[0])) {
+
 
             if(Utils.checkIfStringContainsCharacters(text[1])) {
 
@@ -73,11 +76,11 @@ public class InputResolver {
                                 .setColor(text[1])
                                 .build())
                         .build(),
-                        ParkingLotIntent.REGISTRATION_NUMBERS_BY_COLOR);
+                        ParkingLotIntent.REGISTRATION_NUMBERS_FOR_CARS_WITH_COLOUR);
             }
             throw new ParkingLotException(ErrorCodes.INVALID_INPUT, "Parking lot color should be contain all string.");
 
-        } else if(text.length == 2 && ParkingLotIntent.SLOT_NUMBERS_BY_COLOR.toString().equalsIgnoreCase(text[0])) {
+        } else if(text.length == 2 && ParkingLotIntent.SLOT_NUMBERS_FOR_CARS_WITH_COLOUR.toString().equalsIgnoreCase(text[0])) {
 
             if(Utils.checkIfStringContainsCharacters(text[1])) {
 
@@ -88,11 +91,11 @@ public class InputResolver {
                                 .setColor(text[1])
                                 .build())
                         .build(),
-                        ParkingLotIntent.SLOT_NUMBERS_BY_COLOR);
+                        ParkingLotIntent.SLOT_NUMBERS_FOR_CARS_WITH_COLOUR);
             }
             throw new ParkingLotException(ErrorCodes.INVALID_INPUT, "Parking lot color should be contain all string.");
 
-        } else if (text.length == 2 && ParkingLotIntent.SLOT_NUMBER_BY_REGISTRATION_NUMBER.toString().equals(text[0])) {
+        } else if (text.length == 2 && ParkingLotIntent.SLOT_NUMBER_FOR_REGISTRATION_NUMBER.toString().equalsIgnoreCase(text[0])) {
 
             return new ParkingLotWrapper(ParkingLot.Builder
                     .newInstance()
@@ -101,7 +104,7 @@ public class InputResolver {
                             .setRegistrationNumber(text[1])
                             .build())
                     .build(),
-                    ParkingLotIntent.SLOT_NUMBER_BY_REGISTRATION_NUMBER);
+                    ParkingLotIntent.SLOT_NUMBER_FOR_REGISTRATION_NUMBER);
         }
 
         throw new ParkingLotException(ErrorCodes.INVALID_INPUT, "Input is invalid. Please read instruction.");
