@@ -1,0 +1,13 @@
+package com.gojek.parking.enums;
+
+public enum ParkingLotIntent {
+    CREATE,
+    PARK,
+    LEAVE,
+    UNPARK,
+    STATUS,
+    REGISTRATION_NUMBERS_FOR_CARS_WITH_COLOUR,
+    SLOT_NUMBERS_FOR_CARS_WITH_COLOUR,
+    SLOT_NUMBER_FOR_REGISTRATION_NUMBER,
+    FEEDBACK
+}
